@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import math
 
+#верштина графа (одна клеточка поля)
 class Peak:
     def __init__(self,x,y):
         self.x = x
@@ -18,19 +19,20 @@ class Peak:
 
     def show_param(self):
         print('x=',self.x,'y=',self.y,' parent=',self.parent.x,self.parent.y,' g=',self.g,' h=',self.h)
-
+        
 def show(ls):
     for i in ls:
         print(i.x,i.y)
             #,'',i.parent.x,i.parent.y,'',i.g,i.h)
     #print('__')
-        
+
+#расчет эвристики Эвклидового расстояния     
 def evclide(first,second):
     return math.hypot(first.x - second.x,second.y - first.y)
-
+#расчет эвристики Манхеттенского расстояния 
 def manhettn(first,second):
     return abs(first.x - second.x)+abs(second.y - first,y)
-
+#поиск новых частей фронта.
 def get_front(table,peak):
     friend=[]
     for i in table:
@@ -42,22 +44,25 @@ def get_front(table,peak):
             else:
                 i.g=peak.g+1
                 i.parent=peak
+            #можно использовать Манхеттен вместо Эвклида
             i.h=evclide(i,finish)
             friend.append(i)
     return friend
 
+#проверка присутствия точки в списке
 def check(point,li):
     for i in li:
         if point.x==i.x and point.y==i.y:
             return True
     return False
 
-    
+#добавляем точки во фронт, если там их ещё нет
 def add_new_to_front(front,new):
     for i in new:
         if front.count(i)==0 and check(i,explored)==False:
             i.add_to_front(front)
             
+#выбираем куда шагнуть        
 def choose_step(front):
     if len(front)==0:
         return None
@@ -86,6 +91,7 @@ def path_optimal(path):
 #размеры сетки      
 row=15
 col=15
+#препятствия
 '''
 stone=[Peak(1,2),Peak(2,2),Peak(3,2),Peak(4,2),Peak(5,2),Peak(8,9),
         Peak(9,8),Peak(10,7),Peak(6,6),Peak(7,5),Peak(6,0),
@@ -142,7 +148,6 @@ for i in stone:
         if i.x==j.x and i.y==j.y:
             table.remove(j)
             break
-#show(table)
 
 start.add_to_front(front)
 
